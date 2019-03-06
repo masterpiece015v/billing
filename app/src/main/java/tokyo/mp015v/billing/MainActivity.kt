@@ -8,6 +8,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import kotlin.math.ceil
 import kotlin.math.floor
+data class ListItem(var no : String,var price : String )
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,22 +22,26 @@ class MainActivity : AppCompatActivity() {
         val lst_item = findViewById<ListView>(R.id.lst_item)
         val edt_price = findViewById<EditText>(R.id.edt_price)
         val txt_total = findViewById<TextView>(R.id.txt_total)
-        //val list = mutableListOf<Int>()
-
-        val list = ArrayList<Map<String,String>>()
 
         var total = 0
         var count = 1
+        val list = ArrayList<Item>()
+
+        val adapter = ItemAdapter(this,list )
+        lst_item.adapter = adapter
 
         //ボタンのイベント
         btn_add.setOnClickListener {
             //金額の取り出し
             var price = Integer.parseInt( edt_price.editableText.toString() )
+            var tax = 8
             //消費税の計算
             if( sw1.isChecked==false ){
                 if( sw2.isChecked==false ){
+                    tax = 8
                     price = ceil(price * 1.08 ).toInt()
                 }else{
+                    tax = 10
                     if( (price * 1.1) - floor(price*1.1) >= 0.1 ){
                         price = ceil(price * 1.1 ).toInt()
                     }else{
@@ -48,18 +53,9 @@ class MainActivity : AppCompatActivity() {
             total = total + price
 
             //リストへの追加
-            list.add(mapOf("item_id" to count.toString() , "item_price" to price.toString()))
+            list.add(Item(count.toLong(),price.toLong(),tax ))
 
-            /*
-            val adapter = SimpleAdapter(
-                    this,
-                    list,
-                    ,
-                    arrayOf("id","price"),
-                    intArrayOf(R.id.item_no,R.id.item_price)
-            )
-            lst_item.adapter = adapter
-            */
+            count = count + 1
 
             txt_total.text = "合計金額:${total}"
 

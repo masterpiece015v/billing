@@ -14,15 +14,7 @@ data class ViewHolder(val item_no : TextView, val item_price : TextView, val ite
 class ItemAdapter(context : Context, items : List<Item>) : ArrayAdapter<Item>(context,0,items){
 
     val layoutInflater : LayoutInflater= context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-    val itemList : ArrayList<Item> = ArrayList()
 
-    override fun getCount(): Int {
-        return itemList.size
-    }
-
-    override fun getItemId(p0: Int): Long {
-        return itemList.get(p0).item_no
-    }
 
     //override fun getItem(p0: Int): Any {
     //    return itemList.get(p0)
@@ -44,10 +36,10 @@ class ItemAdapter(context : Context, items : List<Item>) : ArrayAdapter<Item>(co
             holder = view.tag as ViewHolder
         }
 
-        val listItem = getItem(p0)
-        holder.item_no.text = listItem.item_no.toString()
-        holder.item_price.text = listItem.item_price.toString()
-        holder.item_tax.text = listItem.item_tax.toString()
+        val listItem = getItem(p0) as Item
+        holder.item_no.text = "No:" + listItem.item_no.toString()
+        holder.item_price.text = "税込み:" + listItem.item_price.toString()
+        holder.item_tax.text = "消費税率:" + listItem.item_tax.toString()
 
         return view!!
     }
